@@ -1,17 +1,20 @@
+<a name="top"></a>
+
 <div align="center">
 
-# Landed MCP Server
+<a href="https://landed.jobs"><img src="https://static.b100x.ai/email/landed-wordmark.png" alt="Landed" width="200"></a>
 
-**Search AI-native jobs, prepare applications, and study for interviews — from any MCP client.**
-
-A public [Model Context Protocol](https://modelcontextprotocol.io) server that gives Claude, Cursor,
-VS Code, and any other MCP-capable agent live access to [Landed](https://landed.b100x.ai)'s ranked,
-fit-scored job corpus.
+<img src="https://static.b100x.ai/github-repos/images/landed-mcp/banner.svg" alt="Landed MCP Server" width="100%">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 [![Model Context Protocol](https://img.shields.io/badge/MCP-Streamable_HTTP-6E56CF.svg)](https://modelcontextprotocol.io)
 [![Works with Claude](https://img.shields.io/badge/Works_with-Claude-D97757.svg)](#claude-desktop)
 [![Works with Cursor](https://img.shields.io/badge/Works_with-Cursor-000000.svg)](#cursor)
+
+**Search AI-native jobs, prepare applications, and study for interviews — from any MCP client.**
+A public [Model Context Protocol](https://modelcontextprotocol.io) server giving Claude, Cursor, VS Code, and any MCP-capable agent live access to [Landed](https://landed.jobs)'s ranked, fit-scored job corpus.
+
+*Maintained by [Landed](https://landed.jobs) — daily AI-native job matches, agent help with every application, and mock-interview prep.*
 
 </div>
 
@@ -47,7 +50,7 @@ https://mcp.landed.jobs/mcp
 
 Pick your client below. Everything works **anonymously** out of the box — just omit the `Authorization`
 header. Add `Authorization: Bearer lnd_live_…` (mint one at
-[Landed → Settings → API tokens](https://landed.b100x.ai)) for unlimited, brief-personalized search.
+[Landed → Settings → API tokens](https://landed.jobs)) for unlimited, brief-personalized search.
 
 ### Claude Code
 
@@ -197,7 +200,7 @@ that compliant clients load automatically.
 | Tier | How | What you get |
 |------|-----|--------------|
 | **Anonymous** | No header | A shared free budget of job-units. Metered by a hybrid of your IP and an issued `X-Landed-Anon` token (echoed on every response — resend it to keep your budget across sessions). |
-| **Authenticated** | `Authorization: Bearer lnd_live_…` | Unlimited search, personalized to your saved brief + profile. Mint a token at [Landed → Settings → API tokens](https://landed.b100x.ai). |
+| **Authenticated** | `Authorization: Bearer lnd_live_…` | Unlimited search, personalized to your saved brief + profile. Mint a token at [Landed → Settings → API tokens](https://landed.jobs). |
 
 Every result carries a `freemium` block so your agent can see how much budget is left and how to lift
 the cap.
