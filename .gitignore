@@ -14,3 +14,6 @@ dist/
 .DS_Store
 __pycache__/
 *.pyc
+
+# Cross-repo secrets guard — real console secrets live only in landed-infra; never commit them from anywhere.
+console/secrets/
