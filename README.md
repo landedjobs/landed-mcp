@@ -288,8 +288,13 @@ For production: `pnpm start`.
 ```bash
 pnpm dev           # watch + reload
 pnpm check-types   # tsc --noEmit
+pnpm test          # deterministic input-contract tests
 pnpm start         # run once
 ```
+
+The repository includes official MCP Registry metadata in [`server.json`](server.json). It describes
+the public Streamable HTTP endpoint but does not imply that the server has been submitted to or
+accepted by any external registry.
 
 **Project layout**
 
@@ -314,7 +319,8 @@ Stack: TypeScript · Express · [`@modelcontextprotocol/sdk`](https://github.com
 ## Contributing
 
 Issues and PRs welcome — bug fixes, new client setup guides, and learning-catalog additions especially.
-Please run `pnpm check-types` before opening a PR.
+Please run `pnpm check-types` and `pnpm test` before opening a PR. For private vulnerability reports,
+follow [SECURITY.md](SECURITY.md).
 
 ## License
 

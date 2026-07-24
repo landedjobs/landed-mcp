@@ -12,7 +12,8 @@
 	"scripts": {
 		"dev": "tsx watch src/index.ts",
 		"start": "tsx src/index.ts",
-		"check-types": "tsc --noEmit"
+		"check-types": "tsc --noEmit",
+		"test": "tsx --test src/mcp/tools/lib/*.test.ts"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.12.0",

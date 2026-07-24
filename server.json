@@ -1,0 +1,13 @@
+{
+	"$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+	"name": "io.github.landedjobs/landed",
+	"title": "Landed",
+	"description": "Search AI-native jobs, inspect application forms, and fetch free interview-prep resources.",
+	"version": "0.1.0",
+	"remotes": [
+		{
+			"type": "streamable-http",
+			"url": "https://mcp.landed.jobs/mcp"
+		}
+	]
+}
