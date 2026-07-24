@@ -163,7 +163,11 @@ once → copy), list, revoke — plus a copy-paste MCP config snippet with the s
 ## 6. Tools
 
 ### 6.1 `search_jobs`
-- **Input:** `{ query: string, role?, location?, remote?: 'remote'|'hybrid'|'onsite', seniority?, limit?: number }`.
+- **Input:** `{ query?, role?, locations?, countryCodes?, regionCodes?, workAuthorizationCountryCodes?, remote?: 'remote'|'hybrid'|'onsite', seniority?, limit? }`.
+  - `locations` carries human city/country labels and is resolved by the hosted API to stable places.
+  - `countryCodes` uses ISO alpha-2; `regionCodes` is `apac|emea|americas`.
+  - Location is an eligibility gate before ranking, not a BM25 keyword query. `regions` remains as a
+    legacy human-readable compatibility field.
   - Anon: `limit` clamped to ≤ 5. Token'd: ≤ 20.
 - **Behavior:**
   - Anon → build a **skeleton brief** from `query` + filters as `overrides`; call `runSearch`.

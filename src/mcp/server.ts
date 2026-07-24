@@ -9,13 +9,13 @@ import { registerPrompts } from '@/mcp/prompts';
 // identity itself (no DB) — it passes the caller's API token and/or anon id to the Landed API, which owns
 // auth, personalization, and the freemium meter.
 export interface ToolContext {
-	auth: Auth;
+  auth: Auth;
 }
 
 const INSTRUCTIONS = `Landed's job-search MCP server — helps a user find AI-native jobs, prepare applications, and study for interviews.
 
 TOOLS
-- search_jobs: ranked, fit-scored jobs. Fill the structured fields (role, skills, remote, seniority, comp, industries…) from the user's request; you may also pass free text as \`query\`. Returns each job's fitLabel, oneLineWhy, and applyUrl.
+- search_jobs: ranked, fit-scored jobs. Fill the structured fields (role, skills, work mode, physical locations, remote-eligibility country/region codes, seniority, comp, industries…) from the user's request; you may also pass free text as \`query\`. Never invent place IDs. Returns each job's fitLabel, oneLineWhy, and applyUrl.
 - get_job_form: the application form for a jobId, split into standard / screening / eeo fields for answer prep.
 - get_learning_content: free interview-prep, portfolio, and roadmap resources.
 
