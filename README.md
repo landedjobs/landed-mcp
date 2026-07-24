@@ -175,7 +175,7 @@ curl -s -X POST https://mcp.landed.jobs/mcp \
 
 | Tool | What it does | Anonymous cost |
 |------|--------------|:---:|
-| `search_jobs` | Ranked, fit-scored jobs. Fill structured fields (role, skills, remote, seniority, comp, industries…) or a free-text `query` (parsed into filters server-side). | 1 unit / job returned |
+| `search_jobs` | Ranked, fit-scored jobs. Supports physical city/country labels plus canonical remote-eligibility country/region codes; free text is parsed server-side. | 1 unit / job returned |
 | `get_job_form` | Application form for a `jobId`, grouped `standard` / `screening` / `eeo` for answer prep. | **free** |
 | `get_learning_content` | Curated interview-prep, portfolio, and roadmap resources. | **free** |
 
@@ -192,6 +192,19 @@ present results as a clean shortlist — never raw JSON. In most clients they sh
 
 The server also ships always-on `instructions` (tool overview, presentation rules, freemium behavior)
 that compliant clients load automatically.
+
+### Location parameters
+
+Location eligibility is structured rather than keyword-matched:
+
+- `locations`: physical cities/countries, with country included for ambiguous cities, e.g. `["Bengaluru, India"]`
+- `countryCodes`: ISO alpha-2 remote/base eligibility, e.g. `["IN"]`
+- `regionCodes`: `apac`, `emea`, or `americas`
+- `workAuthorizationCountryCodes`: ISO alpha-2 work-authorization countries
+- `remote`: work mode (`remote`, `hybrid`, or `onsite`)
+
+The hosted API resolves human city labels to stable place identities. Callers must not invent place
+IDs. The legacy `regions` field remains accepted for compatibility.
 
 ---
 

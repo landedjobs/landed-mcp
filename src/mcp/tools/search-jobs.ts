@@ -5,7 +5,7 @@ import { budgetExhaustedResult, errorResult, jsonResult } from '@/mcp/tools/lib/
 import type { ToolContext } from '@/mcp/server';
 
 const DESCRIPTION = `Search Landed's live job corpus for AI-native roles and get a ranked, fit-scored shortlist.
-Fill the structured fields (role, skills, remote, seniority, comp, industries…) from the user's request — they drive the ranking. You may also pass a free-text "query"; it's parsed into the same filters and used as a semantic nudge.
+Fill the structured fields (role, skills, work mode, physical locations, remote-eligibility countries/regions, seniority, comp, industries…) from the user's request — they drive the ranking. Physical locations are resolved to stable places; use ISO country codes and canonical region codes when known. You may also pass a free-text "query"; it's parsed into the same filters and used as a semantic nudge.
 Free tier: up to a shared budget of jobs for anonymous callers (each returned job counts). Authenticated callers (Authorization: Bearer <API token>) get unlimited, brief-personalized results.`;
 
 export function registerSearchJobs(server: McpServer, ctx: ToolContext): void {

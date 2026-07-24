@@ -11,7 +11,7 @@ function userText(text: string) {
 
 const FIND_JOBS = `The user is looking for jobs described as: "{describe}".
 
-1. Call **search_jobs**. Read their request and fill the structured fields you can infer — role, skills, seniority, remote (remote|hybrid|onsite), locations, minComp + currency, industries, companyStages, avoid. You may also pass their words verbatim as \`query\`; the server parses it into the same filters and uses it as a semantic nudge.
+1. Call **search_jobs**. Read their request and fill the structured fields you can infer — role, skills, seniority, remote (remote|hybrid|onsite), physical \`locations\`, remote-eligibility \`countryCodes\` / \`regionCodes\`, work authorization, minComp + currency, industries, companyStages, avoid. Include the country in ambiguous city labels. Never invent place IDs. You may also pass their words verbatim as \`query\`; the server parses it into the same filters and uses it as a semantic nudge.
 2. Present the ranked results as a clean, scannable list — NOT raw JSON. For each job show:
    - **Title** · company · location
    - a fit badge from \`fitLabel\` (excellent / good / borderline)
