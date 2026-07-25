@@ -11,9 +11,15 @@
 	},
 	"icons": [
 		{
-			"src": "https://static.b100x.ai/email/landed-wordmark.png",
+			"src": "https://static.b100x.ai/landed-logos/landed-app-icon-square.png",
 			"mimeType": "image/png",
-			"sizes": ["529x123"],
+			"sizes": ["1024x1024"],
+			"theme": "dark"
+		},
+		{
+			"src": "https://static.b100x.ai/landed-logos/landed-logotype-l-light-pad8.png",
+			"mimeType": "image/png",
+			"sizes": ["224x224"],
 			"theme": "light"
 		}
 	],
