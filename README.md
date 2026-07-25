@@ -8,6 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 [![Model Context Protocol](https://img.shields.io/badge/MCP-Streamable_HTTP-6E56CF.svg)](https://modelcontextprotocol.io)
+[![smithery badge](https://smithery.ai/badge/landedjobs/landed)](https://smithery.ai/servers/landedjobs/landed)
 [![Works with Claude](https://img.shields.io/badge/Works_with-Claude-D97757.svg)](#claude-desktop)
 [![Works with Cursor](https://img.shields.io/badge/Works_with-Cursor-000000.svg)](#cursor)
 
@@ -168,6 +169,13 @@ curl -s -X POST https://mcp.landed.jobs/mcp \
   -H 'accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
+
+### Registries
+
+Landed is listed on the [Official MCP Registry](https://registry.modelcontextprotocol.io) as
+`io.github.landedjobs/landed`, and on [Smithery](https://smithery.ai/servers/landedjobs/landed) as
+`landedjobs/landed`. Clients that read either registry can discover and install it without any
+manual configuration.
 
 ---
 
