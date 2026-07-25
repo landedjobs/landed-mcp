@@ -4,6 +4,19 @@
 	"title": "Landed",
 	"description": "Search AI-native jobs, inspect application forms, and fetch free interview-prep resources.",
 	"version": "0.1.0",
+	"websiteUrl": "https://www.landed.jobs/mcp",
+	"repository": {
+		"url": "https://github.com/landedjobs/landed-mcp",
+		"source": "github"
+	},
+	"icons": [
+		{
+			"src": "https://static.b100x.ai/email/landed-wordmark.png",
+			"mimeType": "image/png",
+			"sizes": ["529x123"],
+			"theme": "light"
+		}
+	],
 	"remotes": [
 		{
 			"type": "streamable-http",
