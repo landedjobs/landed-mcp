@@ -3,7 +3,7 @@
 	"name": "io.github.landedjobs/landed",
 	"title": "Landed",
 	"description": "Search AI-native jobs, inspect application forms, and fetch free interview-prep resources.",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"websiteUrl": "https://www.landed.jobs/mcp",
 	"repository": {
 		"url": "https://github.com/landedjobs/landed-mcp",

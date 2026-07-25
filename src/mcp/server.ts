@@ -33,7 +33,7 @@ Anonymous callers get a limited free budget — each returned job from search_jo
 // A fresh server is built per HTTP request (stateless transport) so its tools capture that request's caller
 // credentials. Registration is cheap; the proxy holds no heavy singletons.
 export function buildServer(ctx: ToolContext): McpServer {
-	const server = new McpServer({ name: 'landed-jobs', version: '0.1.0' }, { instructions: INSTRUCTIONS });
+	const server = new McpServer({ name: 'landed-jobs', version: '0.1.1' }, { instructions: INSTRUCTIONS });
 	registerSearchJobs(server, ctx);
 	registerGetJobForm(server, ctx);
 	registerGetLearningContent(server, ctx);
