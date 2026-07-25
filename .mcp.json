@@ -1,0 +1,8 @@
+{
+	"mcpServers": {
+		"landed-jobs": {
+			"type": "http",
+			"url": "https://mcp.landed.jobs/mcp"
+		}
+	}
+}
