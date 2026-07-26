@@ -220,7 +220,7 @@ IDs. The legacy `regions` field remains accepted for compatibility.
 
 | Tier | How | What you get |
 |------|-----|--------------|
-| **Anonymous** | No header | A shared free budget of job-units. Metered by a hybrid of your IP and an issued `X-Landed-Anon` token (echoed on every response — resend it to keep your budget across sessions). |
+| **Anonymous** | No header | A free budget of job-units **that resets every day at 00:00 UTC**. Metered by a hybrid of your IP and an issued `X-Landed-Anon` token (echoed on every response — resend it to keep your budget across sessions). |
 | **Authenticated** | `Authorization: Bearer lnd_live_…` | Unlimited search, personalized to your saved brief + profile. Mint a token at [Landed → Settings → API tokens](https://landed.jobs). |
 
 Every result carries a `freemium` block so your agent can see how much budget is left and how to lift
