@@ -1,6 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { searchCatalog, type LearningCategory } from '@/mcp/catalog/learning';
+import { apiClient } from '@/services/api-client';
 import { jsonResult } from '@/mcp/tools/lib/respond';
 import type { ToolContext } from '@/mcp/server';
 
@@ -13,9 +14,16 @@ const shape = {
 	category: z.enum(['interview-prep', 'portfolio', 'roadmap', 'jobs']).optional().describe('Restrict to one category of content.'),
 };
 
-export function registerGetLearningContent(server: McpServer, _ctx: ToolContext): void {
+export function registerGetLearningContent(server: McpServer, ctx: ToolContext): void {
 	server.registerTool('get_learning_content', { title: 'Get learning content', description: DESCRIPTION, inputSchema: shape }, async (args: { topic?: string; role?: string; category?: LearningCategory }) => {
-		const items = searchCatalog(args);
-		return jsonResult({ items, count: items.length });
+		const startedAt = Date.now();
+		try {
+			const items = searchCatalog(args);
+			apiClient.logUsage(ctx.auth, 'get_learning_content', 'ok', Date.now() - startedAt);
+			return jsonResult({ items, count: items.length });
+		} catch (err) {
+			apiClient.logUsage(ctx.auth, 'get_learning_content', 'error', Date.now() - startedAt);
+			throw err;
+		}
 	});
 }
