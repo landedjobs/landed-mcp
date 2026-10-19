@@ -5,6 +5,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { config } from '@/config';
 import { buildServer } from '@/mcp/server';
 import { rateLimit } from '@/http/rate-limit';
+import { resolveClient } from '@/http/client-info';
 import type { Auth } from '@/services/api-client';
 
 const PRODUCT_TOKEN_PREFIX = 'lnd_live_';
@@ -47,6 +48,7 @@ export function createHttpServer(): Express {
 	// credentials, and tear both down when the response closes.
 	app.post('/mcp', rateLimit, async (req: Request, res: Response) => {
 		const auth = readAuth(req);
+		auth.client = resolveClient(req, auth);
 		// Echo the (possibly freshly-minted) anon token for anonymous callers so a cooperating client can
 		// resend it and keep its budget across sessions.
 		if (!auth.token) res.setHeader('X-Landed-Anon', auth.anonId);
