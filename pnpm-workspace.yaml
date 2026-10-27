@@ -1,0 +1,3 @@
+# The deploy box runs pnpm 11, which refuses packages published under a day ago.
+overrides:
+  import-in-the-middle: 3.3.0
