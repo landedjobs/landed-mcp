@@ -35,7 +35,8 @@ async function post<T>(auth: Auth, path: string, body: unknown): Promise<T> {
 	if (!res.ok) {
 		const text = await res.text().catch(() => '');
 		// 401 = the caller's API token was rejected upstream; surface the server's message to the agent.
-		throw new Error(res.status === 401 ? text || 'Invalid or revoked API token' : `Landed API ${path} failed (${res.status})`);
+		const error = new Error(res.status === 401 ? text || 'Invalid or revoked API token' : `Landed API ${path} failed (${res.status})`);
+		throw Object.assign(error, { status: res.status });
 	}
 	return (await res.json()) as T;
 }

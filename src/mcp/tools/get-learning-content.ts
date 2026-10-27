@@ -4,6 +4,7 @@ import { searchCatalog, type LearningCategory } from '@/mcp/catalog/learning';
 import { apiClient } from '@/services/api-client';
 import { jsonResult } from '@/mcp/tools/lib/respond';
 import type { ToolContext } from '@/mcp/server';
+import { reportToolFailure } from '@/instrument';
 
 const DESCRIPTION = `Get Landed's free learning content to help the user prepare — curated interview-prep repos (real questions, company guides, worked system designs), portfolio-project catalogs, and role roadmaps from the landedjobs GitHub org.
 Filter by topic, role, and/or category. Always free, for any caller.`;
@@ -23,6 +24,7 @@ export function registerGetLearningContent(server: McpServer, ctx: ToolContext):
 			return jsonResult({ items, count: items.length });
 		} catch (err) {
 			apiClient.logUsage(ctx.auth, 'get_learning_content', 'error', Date.now() - startedAt);
+			reportToolFailure('get_learning_content', err);
 			throw err;
 		}
 	});

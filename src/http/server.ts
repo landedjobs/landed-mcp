@@ -7,6 +7,7 @@ import { buildServer } from '@/mcp/server';
 import { rateLimit } from '@/http/rate-limit';
 import { resolveClient } from '@/http/client-info';
 import type { Auth } from '@/services/api-client';
+import { reportError } from '@/instrument';
 
 const PRODUCT_TOKEN_PREFIX = 'lnd_live_';
 const ANON_PREFIX = 'lnd_anon_';
@@ -65,6 +66,7 @@ export function createHttpServer(): Express {
 			await transport.handleRequest(req, res, req.body);
 		} catch (err) {
 			console.error('mcp request failed', err);
+			reportError(err, 'transport');
 			if (!res.headersSent) res.status(500).json({ jsonrpc: '2.0', error: { code: -32603, message: 'Internal error' }, id: null });
 		}
 	});

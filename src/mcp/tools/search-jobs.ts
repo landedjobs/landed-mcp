@@ -3,6 +3,7 @@ import { apiClient } from '@/services/api-client';
 import { searchJobsShape, type SearchJobsInput } from '@/mcp/tools/lib/search-input';
 import { budgetExhaustedResult, errorResult, jsonResult } from '@/mcp/tools/lib/respond';
 import type { ToolContext } from '@/mcp/server';
+import { reportToolFailure } from '@/instrument';
 
 const DESCRIPTION = `Search Landed's live job corpus for AI-native roles and get a ranked, fit-scored shortlist.
 Fill the structured fields (role, skills, work mode, physical locations, remote-eligibility countries/regions, seniority, comp, industries…) from the user's request — they drive the ranking. Physical locations are resolved to stable places; use ISO country codes and canonical region codes when known. You may also pass a free-text "query"; it's parsed into the same filters and used as a semantic nudge.
@@ -15,6 +16,7 @@ export function registerSearchJobs(server: McpServer, ctx: ToolContext): void {
 			if (res.status === 'budget_exhausted') return budgetExhaustedResult(res);
 			return jsonResult({ jobs: res.jobs, total: res.total, returned: res.returned, freemium: res.freemium });
 		} catch (err) {
+			reportToolFailure('search_jobs', err);
 			return errorResult(err instanceof Error ? err.message : 'Search failed.');
 		}
 	});
