@@ -289,6 +289,17 @@ pnpm dev                   # hot-reload dev server
 
 For production: `pnpm start`.
 
+### Stdio and Docker
+
+For clients that start the server as a process, `pnpm start:stdio` speaks MCP over stdio instead of HTTP. Set `LANDED_API_TOKEN` to use your own API token; without it you get the anonymous free budget.
+
+```bash
+docker build -t landed-mcp .
+docker run -i --rm landed-mcp
+```
+
+The image runs the stdio server against the hosted API.
+
 ### Environment variables
 
 | Variable | Required | Default | Description |
