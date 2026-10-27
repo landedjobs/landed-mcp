@@ -158,6 +158,23 @@ Open **Cline → MCP Servers → Configure**, or edit `cline_mcp_settings.json`:
 }
 ```
 
+### Gemini CLI
+
+Edit `~/.gemini/settings.json` (or `.gemini/settings.json` in your project):
+
+```jsonc
+{
+  "mcpServers": {
+    "landed-jobs": {
+      "httpUrl": "https://mcp.landed.jobs/mcp",
+      "headers": { "Authorization": "Bearer lnd_live_your_token_here" }
+    }
+  }
+}
+```
+
+Restart `gemini` and run `/mcp` to see the tools. Omit `headers` for the free tier.
+
 ### Any other MCP client
 
 Point it at `https://mcp.landed.jobs/mcp` using the **Streamable HTTP** transport. Pass
