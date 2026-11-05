@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 [![Model Context Protocol](https://img.shields.io/badge/MCP-Streamable_HTTP-6E56CF.svg)](https://modelcontextprotocol.io)
-[![smithery badge](https://smithery.ai/badge/landedjobs/landed)](https://smithery.ai/servers/landedjobs/landed)
+[![LightNow capabilities](https://lightnow.ai/badge/io.github.landedjobs/landed)](https://lightnow.ai/servers/io.github.landedjobs/landed)
 [![Works with Claude](https://img.shields.io/badge/Works_with-Claude-D97757.svg)](#claude-desktop)
 [![Works with Cursor](https://img.shields.io/badge/Works_with-Cursor-000000.svg)](#cursor)
 
