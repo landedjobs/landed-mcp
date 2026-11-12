@@ -28,7 +28,7 @@ if (dsn) {
 }
 
 // A tool call that failed for a reason the caller cannot fix: the Landed API was unreachable or answered 5xx.
-// A rejected token or a spent free budget is an answer, not a fault.
+// A rejected token or a reached plan limit is an answer, not a fault.
 export function reportToolFailure(tool: string, error: unknown): void {
 	const status = (error as { status?: number } | null)?.status;
 	if (status !== undefined && status < 500) return;

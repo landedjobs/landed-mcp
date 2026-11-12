@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import cors from 'cors';
 import express, { type Express, type Request, type Response } from 'express';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -10,7 +9,6 @@ import type { Auth } from '@/services/api-client';
 import { reportError } from '@/instrument';
 
 const PRODUCT_TOKEN_PREFIX = 'lnd_live_';
-const ANON_PREFIX = 'lnd_anon_';
 
 function methodNotAllowed(_req: Request, res: Response): void {
 	res.status(405).json({ jsonrpc: '2.0', error: { code: -32000, message: 'Method not allowed. Use POST for MCP.' }, id: null });
@@ -23,25 +21,18 @@ function clientIp(req: Request): string | undefined {
 }
 
 // Read the forwarded caller credentials off the request. We do NOT validate here — the Landed API validates
-// the token and enforces the freemium meter. A valid-looking product token means "authenticated"; otherwise
-// the caller is anonymous, reusing their echoed anon token or getting a freshly minted one.
+// the token and enforces plan limits. Without a valid-looking product token the caller is anonymous, and
+// search answers sign_in_required without calling the API.
 function readAuth(req: Request): Auth {
 	const bearer = req.headers.authorization?.split(' ')[1]?.trim();
 	const token = bearer && bearer.startsWith(PRODUCT_TOKEN_PREFIX) ? bearer : undefined;
-	const header = req.headers['x-landed-anon'];
-	const existing = typeof header === 'string' && header.startsWith(ANON_PREFIX) ? header : undefined;
-	return { token, anonId: existing ?? `${ANON_PREFIX}${randomUUID()}`, ip: clientIp(req) };
+	return { token, ip: clientIp(req) };
 }
 
 export function createHttpServer(): Express {
 	const app = express();
 	app.use(express.json({ limit: '1mb' }));
-	app.use(
-		cors({
-			origin: config.http.cors === '*' ? true : config.http.cors.split(',').map(o => o.trim()),
-			exposedHeaders: ['X-Landed-Anon'],
-		})
-	);
+	app.use(cors({ origin: config.http.cors === '*' ? true : config.http.cors.split(',').map(o => o.trim()) }));
 
 	app.get('/healthz', (_req, res) => res.json({ ok: true }));
 
@@ -50,9 +41,6 @@ export function createHttpServer(): Express {
 	app.post('/mcp', rateLimit, async (req: Request, res: Response) => {
 		const auth = readAuth(req);
 		auth.client = resolveClient(req, auth);
-		// Echo the (possibly freshly-minted) anon token for anonymous callers so a cooperating client can
-		// resend it and keep its budget across sessions.
-		if (!auth.token) res.setHeader('X-Landed-Anon', auth.anonId);
 
 		const server = buildServer({ auth });
 		const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });

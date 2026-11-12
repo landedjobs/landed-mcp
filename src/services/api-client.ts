@@ -1,10 +1,10 @@
 import { config } from '@/config';
-import type { JobFormResponse, SearchResponse } from '@/types';
+import type { SearchResponse } from '@/types';
 import type { SearchJobsInput } from '@/mcp/tools/lib/search-input';
 
-// The end-caller identity we forward to the Landed API on every request. `token` is the caller's product
-// API token (lnd_live_…) if they presented one; otherwise `anonId` is the anon token we minted/echoed and
-// `ip` keys their freemium budget. The proxy itself authenticates with the shared secret (header below).
+// The end-caller identity we forward to the Landed API. `token` is the caller's product API token
+// (lnd_live_…) if they presented one; search needs it. The proxy itself authenticates with the shared
+// secret (header below).
 export interface McpClient {
 	name: string;
 	version?: string;
@@ -12,7 +12,6 @@ export interface McpClient {
 
 export interface Auth {
 	token?: string;
-	anonId: string;
 	ip?: string;
 	client?: McpClient;
 }
@@ -43,10 +42,7 @@ async function post<T>(auth: Auth, path: string, body: unknown): Promise<T> {
 
 export const apiClient = {
 	search(auth: Auth, input: SearchJobsInput): Promise<SearchResponse> {
-		return post(auth, '/mcp/search', { token: auth.token, anonId: auth.anonId, ip: auth.ip, ...input });
-	},
-	jobForm(auth: Auth, jobId: string): Promise<JobFormResponse> {
-		return post(auth, '/mcp/job-form', { token: auth.token, anonId: auth.anonId, ip: auth.ip, jobId });
+		return post(auth, '/mcp/search', { token: auth.token, ip: auth.ip, ...input });
 	},
 	// For tools answered inside the proxy. Fire-and-forget: a failed log never affects the tool call.
 	logUsage(auth: Auth, tool: string, status: UsageStatus, latencyMs: number): void {
@@ -55,7 +51,6 @@ export const apiClient = {
 			headers: headersFor(auth),
 			body: JSON.stringify({
 				token: auth.token,
-				anonId: auth.anonId,
 				ip: auth.ip,
 				tool,
 				clientName: auth.client?.name,
