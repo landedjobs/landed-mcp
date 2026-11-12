@@ -7,7 +7,7 @@ import type { ToolContext } from '@/mcp/server';
 import { reportToolFailure } from '@/instrument';
 
 const DESCRIPTION = `Get Landed's free learning content to help the user prepare — curated interview-prep repos (real questions, company guides, worked system designs), portfolio-project catalogs, and role roadmaps from the landedjobs GitHub org.
-Filter by topic, role, and/or category. Always free, for any caller.`;
+Filter by topic, role, and/or category.`;
 
 const shape = {
 	topic: z.string().trim().max(120).optional().describe('Free-text topic, e.g. "RAG", "system design", "evals".'),
@@ -16,7 +16,12 @@ const shape = {
 };
 
 export function registerGetLearningContent(server: McpServer, ctx: ToolContext): void {
-	server.registerTool('get_learning_content', { title: 'Get learning content', description: DESCRIPTION, inputSchema: shape }, async (args: { topic?: string; role?: string; category?: LearningCategory }) => {
+	server.registerTool('get_learning_content', {
+			title: 'Get learning content',
+			description: DESCRIPTION,
+			inputSchema: shape,
+			annotations: { title: 'Get learning content', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+		}, async (args: { topic?: string; role?: string; category?: LearningCategory }) => {
 		const startedAt = Date.now();
 		try {
 			const items = searchCatalog(args);

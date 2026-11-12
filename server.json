@@ -2,8 +2,8 @@
 	"$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
 	"name": "io.github.landedjobs/landed",
 	"title": "Landed",
-	"description": "Search jobs with a landed API token (required) and fetch free interview-prep resources.",
-	"version": "0.2.0",
+	"description": "Sign in with landed to search jobs ranked to your résumé and fetch free interview-prep resources.",
+	"version": "0.3.0",
 	"websiteUrl": "https://www.landed.jobs/mcp",
 	"repository": {
 		"url": "https://github.com/landedjobs/landed-mcp",
@@ -30,9 +30,9 @@
 			"headers": [
 				{
 					"name": "Authorization",
-					"description": "Your landed API token as \"Bearer <token>\". Sign in to landed and create one in Settings. Job search needs it; learning content does not.",
+					"description": "Optional: a landed API token as \"Bearer <token>\" for clients without OAuth sign-in. Create one in landed Settings.",
 					"placeholder": "Bearer lnd_live_...",
-					"isRequired": true,
+					"isRequired": false,
 					"isSecret": true
 				}
 			]
