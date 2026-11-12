@@ -23,4 +23,8 @@ export const config = {
 	},
 	rateLimitPerMin: Number(process.env.RATE_LIMIT_PER_MIN ?? 60),
 	signupUrl: process.env.LANDED_SIGNUP_URL ?? 'https://app.landed.jobs',
+	// "Sign in with landed": this server's public address (the OAuth issuer and resource) and the app that
+	// shows the Allow screen.
+	publicUrl: (process.env.MCP_PUBLIC_URL ?? 'https://mcp.landed.jobs').replace(/\/$/, ''),
+	appUrl: (process.env.LANDED_APP_URL ?? 'https://app.landed.jobs').replace(/\/$/, ''),
 };

@@ -61,4 +61,14 @@ export const apiClient = {
 			signal: AbortSignal.timeout(5000),
 		}).catch(() => {});
 	},
+	// "Sign in with landed": register an app and trade a code, forwarded as-is. The API's answer (status and
+	// body) goes back to the app, so its OAuth errors reach it unchanged.
+	oauth(path: 'register' | 'token', body: unknown): Promise<{ status: number; body: unknown }> {
+		return fetch(`${config.api.base}/mcp/oauth/${path}`, {
+			method: 'POST',
+			headers: headersFor({}),
+			body: JSON.stringify(body),
+			signal: AbortSignal.timeout(10000),
+		}).then(async res => ({ status: res.status, body: await res.json().catch(() => ({})) }));
+	},
 };

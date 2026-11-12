@@ -1,7 +1,7 @@
 {
 	"name": "landed-mcp",
-	"version": "0.2.0",
-	"description": "Landed's public Model Context Protocol server — search jobs with a landed API token and pull free learning content from any MCP client.",
+	"version": "0.3.0",
+	"description": "Landed's public Model Context Protocol server — sign in with landed to search jobs and pull free learning content from any MCP client.",
 	"license": "MIT",
 	"type": "module",
 	"homepage": "https://mcp.landed.jobs",
@@ -14,7 +14,7 @@
 		"start": "tsx src/index.ts",
 		"start:stdio": "tsx src/stdio.ts",
 		"check-types": "tsc --noEmit",
-		"test": "tsx --test src/mcp/tools/lib/*.test.ts"
+		"test": "tsx --test src/mcp/tools/lib/*.test.ts src/http/*.test.ts"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.12.0",

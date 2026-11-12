@@ -35,8 +35,8 @@ boards into a chat, your agent can:
 It speaks **Streamable HTTP** and works with any MCP client. Use the **hosted** server in seconds, or
 **self-host** this repo against your own Landed API.
 
-> **Job search needs a landed API token.** Sign in to [landed](https://app.landed.jobs), create an API
-> token in Settings, and send it as `Authorization: Bearer <token>`. Learning content is open to everyone.
+> **Sign in with landed.** Add the server and your AI app opens landed's sign-in; choose **Allow** and
+> you're connected. Clients without OAuth can still send a landed API token as `Authorization: Bearer <token>`.
 
 ---
 
@@ -48,20 +48,20 @@ The hosted server lives at:
 https://mcp.landed.jobs/mcp
 ```
 
-Pick your client below. Job search needs `Authorization: Bearer lnd_live_…`: sign in to
-[landed](https://app.landed.jobs) and create an API token in Settings. Without it, `search_jobs` answers
-`sign_in_required`; `get_learning_content` still works.
+Pick your client below. Clients with OAuth (Claude, Claude Code, ChatGPT, Cursor, VS Code) open
+"Sign in with landed" the first time: sign in, choose **Allow**, done. You can disconnect any time in
+landed under Settings → API tokens. The `--header` / `headers` lines below are only for clients
+without OAuth: sign in to [landed](https://app.landed.jobs) and create an API token in Settings.
 
 ### Claude Code
 
 The one-liner (CLI):
 
 ```bash
-claude mcp add --transport http landed-jobs https://mcp.landed.jobs/mcp \
-  --header "Authorization: Bearer lnd_live_your_token_here"
+claude mcp add --transport http landed-jobs https://mcp.landed.jobs/mcp
 ```
 
-Then in a session: `/mcp` to confirm it's connected, and try the `find_jobs` prompt.
+Then in a session: `/mcp`, pick landed and sign in, to confirm it's connected, and try the `find_jobs` prompt.
 
 ### Claude Desktop
 
@@ -195,14 +195,14 @@ manual configuration.
 
 | Tool | What it does | Access |
 |------|--------------|:---:|
-| `search_jobs` | Ranked, fit-scored jobs, each with a `productUrl` to the job in the landed app (apply there). Fill the structured fields (role, seniority, locations, remote, skills, minComp); free-text `query` is matched only as a title. | API token, daily limit by plan |
-| `get_learning_content` | Curated interview-prep, portfolio, and roadmap resources. | open to everyone |
+| `search_jobs` | Ranked, fit-scored jobs, each with a `productUrl` to the job in the landed app (apply there). Fill the structured fields (role, seniority, locations, remote, skills, minComp); free-text `query` is matched only as a title. | signed in, daily limit by plan |
+| `get_learning_content` | Curated interview-prep, portfolio, and roadmap resources. | signed in |
 
 `search_jobs` returns one of three statuses:
 
 - `ok`: `jobs` (each with `jobId`, `title`, `company`, `location`, `fitLabel`, `oneLineWhy`, `productUrl`).
-- `sign_in_required`: no token was sent; the result has the message and `signupUrl`. The proxy answers this itself, without calling the API.
-- `limit_reached`: the day's searches for the plan are used; the result has `message`, `limit`, `resetsAt` and `upgradeUrl`.
+- `sign_in_required`: the token was not accepted; reconnect landed in your AI app.
+- `limit_reached`: the day's searches for the plan are used; the result has `message`, `limit` and `resetsAt`.
 
 ## Prompts (guided workflows)
 
@@ -234,8 +234,17 @@ IDs. The legacy `regions` field remains accepted for compatibility.
 
 ## Auth & pricing
 
-`search_jobs` needs `Authorization: Bearer lnd_live_…`. Sign in to [landed](https://app.landed.jobs) and
-create an API token in Settings. There is no anonymous tier for search.
+The server uses OAuth 2.1 (authorization code with PKCE, dynamic client registration). A request with no
+token gets `401` with `WWW-Authenticate: Bearer resource_metadata="https://mcp.landed.jobs/.well-known/oauth-protected-resource"`,
+and the client discovers the rest from there:
+
+- `/.well-known/oauth-protected-resource` and `/.well-known/oauth-authorization-server`
+- `POST /oauth/register` (dynamic client registration), `POST /oauth/token` (code exchange)
+- the Allow screen at `https://app.landed.jobs/oauth/authorize`
+
+The token an app receives is an ordinary landed API token, listed in Settings → API tokens. A token you
+create there by hand works the same way, as `Authorization: Bearer lnd_live_…`. Privacy:
+[mcp.landed.jobs/privacy](https://mcp.landed.jobs/privacy).
 
 Each search counts against a daily limit set by your landed plan:
 
@@ -245,8 +254,7 @@ Each search counts against a daily limit set by your landed plan:
 | Plus | 50 |
 | Pro and Max | 200 |
 
-At the limit, `search_jobs` returns `limit_reached` with when it resets and an upgrade link.
-`get_learning_content` is open to everyone, with or without a token.
+At the limit, `search_jobs` returns `limit_reached` with when it resets.
 
 ---
 
@@ -265,8 +273,8 @@ API — it holds **no database, no ranking engine, and no job data**.
 ```
 
 The proxy forwards the caller's API token to the Landed API, which validates it, runs the search,
-counts it against the plan limit, and returns the result. A search without a token is answered by the
-proxy itself with `sign_in_required`, so it never reaches the API. The `get_learning_content` catalog is static and lives in this repo
+counts it against the plan limit, and returns the result. A request without a token is answered by the
+proxy itself with `401`, so it never reaches the API. The `get_learning_content` catalog is static and lives in this repo
 ([`src/mcp/catalog/learning.ts`](src/mcp/catalog/learning.ts)) — that tool works with no backend at all.
 
 ---

@@ -12,8 +12,8 @@ function userText(text: string) {
 const FIND_JOBS = `The user is looking for jobs described as: "{describe}".
 
 1. Call **search_jobs**. Fill the structured fields from their words: role, seniority, physical \`locations\`, remote (remote|hybrid|onsite), skills, minComp + currency, and when known remote-eligibility \`countryCodes\` / \`regionCodes\`, work authorization, industries, companyStages, avoid. Include the country in ambiguous city labels. Never invent place IDs. The free-text \`query\` is matched only as a job title, so put the title there and everything else in the fields.
-2. If \`status\` is "sign_in_required", tell the user to sign in to landed (\`signupUrl\`), create an API token in Settings, and add it to this connection as \`Authorization: Bearer <token>\`.
-3. If \`status\` is "limit_reached", show the \`message\`, when the limit resets (\`resetsAt\`), and the \`upgradeUrl\` as a link. Daily searches by plan: Free 10, Plus 50, Pro and Max 200.
+2. If \`status\` is "sign_in_required", tell the user to reconnect landed in this app and sign in again.
+3. If \`status\` is "limit_reached", show the \`message\` and when the limit resets (\`resetsAt\`).
 4. Otherwise present the ranked results as a clean, scannable list — NOT raw JSON. For each job show:
    - **Title** · company · location
    - a fit badge from \`fitLabel\` (excellent / good / borderline)
@@ -25,7 +25,7 @@ const PREP_FOR_ROLE = `The user wants to prepare for **{role}** roles.
 
 1. Call **get_learning_content** with role and/or a topic (e.g. "RAG", "system design").
 2. Present the items grouped by category — interview-prep, portfolio, roadmap — each as a markdown link (title → url) with its one-line description.
-3. Suggest a sensible order: skim the roadmap, drill the interview-prep questions and company guides, then build one or two portfolio projects to show. This tool is always free.`;
+3. Suggest a sensible order: skim the roadmap, drill the interview-prep questions and company guides, then build one or two portfolio projects to show.`;
 
 export function registerPrompts(server: McpServer): void {
 	server.registerPrompt(
