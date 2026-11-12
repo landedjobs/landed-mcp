@@ -9,45 +9,30 @@ export interface JobResult {
 	location?: string;
 	fitLabel: string; // excellent | good | borderline | notAFit
 	oneLineWhy: string;
+	productUrl: string; // the job in the landed app, where the person applies
 	url?: string;
 	applyUrl?: string;
 }
 
-// One normalized apply-form question. `group` is standard | screening | eeo.
-export interface FormField {
-	key: string;
-	label: string;
-	type: string;
-	options: string[];
-	required: boolean;
-	group: string;
-	mapsTo?: string;
-}
-
-// The freemium status the server appends to every tool result. Present as-is to the caller.
-export interface FreemiumMeta {
-	plan: string; // free | authenticated
-	metered: boolean;
-	jobUnitsBudget?: number;
-	jobUnitsUsed?: number;
-	jobUnitsRemaining?: number;
-	anonToken?: string;
-	note?: string;
-}
-
-export interface SearchResponse {
-	status: 'ok' | 'budget_exhausted';
-	jobs?: JobResult[];
+export interface SearchOk {
+	status: 'ok';
+	jobs: JobResult[];
 	total?: number;
 	returned?: number;
-	signupUrl?: string; // present on budget_exhausted
-	freemium: FreemiumMeta;
 }
 
-export interface JobFormResponse {
-	jobId: string;
-	status: 'fetched' | 'not_available';
-	applyUrl?: string;
-	fieldsByGroup?: Record<string, FormField[]>;
-	freemium: FreemiumMeta;
+export interface SearchSignInRequired {
+	status: 'sign_in_required';
+	message?: string;
+	signupUrl?: string;
 }
+
+export interface SearchLimitReached {
+	status: 'limit_reached';
+	limit: number;
+	resetsAt: string;
+	upgradeUrl: string;
+	message: string;
+}
+
+export type SearchResponse = SearchOk | SearchSignInRequired | SearchLimitReached;

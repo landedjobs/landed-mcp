@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 import { config } from '@/config';
 
 // Minimal in-memory fixed-window limiter, keyed by client IP — a cheap first line of defense for the public
-// endpoint (the freemium job-unit budget is the real economic cap). For a multi-instance deploy this should
+// endpoint (each person's plan search limit is the real economic cap). For a multi-instance deploy this should
 // move to a shared store (e.g. Redis); single-instance is fine to start.
 const WINDOW_MS = 60_000;
 const hits = new Map<string, { count: number; resetAt: number }>();

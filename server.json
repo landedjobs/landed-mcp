@@ -2,8 +2,8 @@
 	"$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
 	"name": "io.github.landedjobs/landed",
 	"title": "Landed",
-	"description": "Search AI-native jobs, inspect application forms, and fetch free interview-prep resources.",
-	"version": "0.1.1",
+	"description": "Search jobs with a landed API token (required) and fetch free interview-prep resources.",
+	"version": "0.2.0",
 	"websiteUrl": "https://www.landed.jobs/mcp",
 	"repository": {
 		"url": "https://github.com/landedjobs/landed-mcp",
@@ -26,7 +26,16 @@
 	"remotes": [
 		{
 			"type": "streamable-http",
-			"url": "https://mcp.landed.jobs/mcp"
+			"url": "https://mcp.landed.jobs/mcp",
+			"headers": [
+				{
+					"name": "Authorization",
+					"description": "Your landed API token as \"Bearer <token>\". Sign in to landed and create one in Settings. Job search needs it; learning content does not.",
+					"placeholder": "Bearer lnd_live_...",
+					"isRequired": true,
+					"isSecret": true
+				}
+			]
 		}
 	]
 }

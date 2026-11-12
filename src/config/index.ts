@@ -11,7 +11,7 @@ function required(key: string, fallback?: string): string {
 
 export const config = {
 	// The hosted Landed API this proxy forwards to. Include the /api/v1 prefix. All the heavy lifting —
-	// search engine, DB, Gemini, auth, and freemium metering — lives behind it; this server only speaks MCP.
+	// search engine, DB, auth, and plan limits — lives behind it; this server only speaks MCP.
 	api: {
 		base: required('LANDED_API_BASE', 'http://localhost:8000/api/v1').replace(/\/$/, ''),
 		// Shared secret authenticating this proxy to the Landed API (matches the server's INTERNAL_SERVICE_SECRET).
@@ -22,4 +22,5 @@ export const config = {
 		cors: process.env.CORS_ORIGINS ?? '*',
 	},
 	rateLimitPerMin: Number(process.env.RATE_LIMIT_PER_MIN ?? 60),
+	signupUrl: process.env.LANDED_SIGNUP_URL ?? 'https://app.landed.jobs',
 };

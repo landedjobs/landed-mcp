@@ -2,10 +2,10 @@ import { z } from 'zod';
 
 // The structured input surface for search_jobs. Each field is described so the *calling* agent's LLM
 // populates it from the user's request — the tool schema is our brief-elicitation mechanism. The proxy
-// forwards these verbatim to the Landed API, which turns them (plus a Gemini-parsed `query`) into the
-// engine's ranking brief.
+// forwards these verbatim to the Landed API, which turns them into the engine's ranking brief. The free-text
+// `query` is matched only as a title, so the structured fields carry the rest.
 export const searchJobsShape = {
-	query: z.string().trim().max(400).optional().describe('Free-text description of the ideal job, in the user’s own words. Parsed server-side into structured filters; also used as a semantic nudge.'),
+	query: z.string().trim().max(400).optional().describe('Free text, matched only as a wanted job title. Put everything else the user said (seniority, places, remote, skills, pay) in the structured fields.'),
 	role: z.string().trim().max(120).optional().describe('Target role or title family, e.g. "AI Engineer", "RAG Engineer", "Data Scientist".'),
 	seniority: z.string().trim().max(60).optional().describe('Seniority target, e.g. "junior", "mid", "senior", "staff", "lead".'),
 	skills: z.array(z.string()).max(30).optional().describe('Core skills / technologies the role should involve, e.g. ["RAG", "LangChain", "Python"].'),

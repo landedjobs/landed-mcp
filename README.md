@@ -12,7 +12,7 @@
 [![Works with Claude](https://img.shields.io/badge/Works_with-Claude-D97757.svg)](#claude-desktop)
 [![Works with Cursor](https://img.shields.io/badge/Works_with-Cursor-000000.svg)](#cursor)
 
-**Search AI-native jobs, prepare applications, and study for interviews — from any MCP client.**
+**Search AI-native jobs and study for interviews — from any MCP client.**
 A public [Model Context Protocol](https://modelcontextprotocol.io) server giving Claude, Cursor, VS Code, and any MCP-capable agent live access to [Landed](https://landed.jobs)'s ranked, fit-scored job corpus.
 
 *Maintained by [Landed](https://landed.jobs) — daily AI-native job matches, agent help with every application, and mock-interview prep.*
@@ -29,15 +29,14 @@ boards into a chat, your agent can:
 
 - 🔎 **Search jobs** — ranked and fit-scored against a structured brief (role, skills, seniority,
   remote, compensation, industries…), or from a plain-English description.
-- 📝 **Prepare applications** — pull a job's real application form, grouped into standard / screening /
-  EEO fields, so the agent can auto-fill and draft answers before you apply.
+- 📝 **Apply in landed** — every result links to the job in the landed app, where you apply.
 - 🎓 **Study for interviews** — fetch free, curated interview-prep, portfolio, and roadmap resources.
 
 It speaks **Streamable HTTP** and works with any MCP client. Use the **hosted** server in seconds, or
 **self-host** this repo against your own Landed API.
 
-> **Free to start.** Anonymous callers get a shared free budget — no signup, no key. Add an API token
-> for unlimited, personalized results.
+> **Job search needs a landed API token.** Sign in to [landed](https://app.landed.jobs), create an API
+> token in Settings, and send it as `Authorization: Bearer <token>`. Learning content is open to everyone.
 
 ---
 
@@ -49,19 +48,15 @@ The hosted server lives at:
 https://mcp.landed.jobs/mcp
 ```
 
-Pick your client below. Everything works **anonymously** out of the box — just omit the `Authorization`
-header. Add `Authorization: Bearer lnd_live_…` (mint one at
-[Landed → Settings → API tokens](https://landed.jobs)) for unlimited, brief-personalized search.
+Pick your client below. Job search needs `Authorization: Bearer lnd_live_…`: sign in to
+[landed](https://app.landed.jobs) and create an API token in Settings. Without it, `search_jobs` answers
+`sign_in_required`; `get_learning_content` still works.
 
 ### Claude Code
 
 The one-liner (CLI):
 
 ```bash
-# Anonymous (free tier)
-claude mcp add --transport http landed-jobs https://mcp.landed.jobs/mcp
-
-# Authenticated (unlimited, personalized)
 claude mcp add --transport http landed-jobs https://mcp.landed.jobs/mcp \
   --header "Authorization: Bearer lnd_live_your_token_here"
 ```
@@ -86,7 +81,7 @@ Open **Settings → Developer → Edit Config** (this opens `claude_desktop_conf
 }
 ```
 
-Restart Claude Desktop. Drop the `--header` line for the free anonymous tier.
+Restart Claude Desktop.
 
 > Claude Desktop bridges remote HTTP servers through [`mcp-remote`](https://www.npmjs.com/package/mcp-remote).
 > If your build has native **Custom Connectors** (Settings → Connectors → *Add custom connector*), you can
@@ -107,7 +102,7 @@ Create `.cursor/mcp.json` in your project (or `~/.cursor/mcp.json` globally):
 }
 ```
 
-Then enable **landed-jobs** under **Settings → MCP**. Omit `headers` for the free tier.
+Then enable **landed-jobs** under **Settings → MCP**.
 
 ### VS Code (GitHub Copilot / Agent Mode)
 
@@ -173,12 +168,12 @@ Edit `~/.gemini/settings.json` (or `.gemini/settings.json` in your project):
 }
 ```
 
-Restart `gemini` and run `/mcp` to see the tools. Omit `headers` for the free tier.
+Restart `gemini` and run `/mcp` to see the tools.
 
 ### Any other MCP client
 
-Point it at `https://mcp.landed.jobs/mcp` using the **Streamable HTTP** transport. Pass
-`Authorization: Bearer <token>` if you have one. Quick sanity check from a terminal:
+Point it at `https://mcp.landed.jobs/mcp` using the **Streamable HTTP** transport and pass
+`Authorization: Bearer <token>`. Quick sanity check from a terminal:
 
 ```bash
 curl -s -X POST https://mcp.landed.jobs/mcp \
@@ -198,11 +193,16 @@ manual configuration.
 
 ## Tools
 
-| Tool | What it does | Anonymous cost |
+| Tool | What it does | Access |
 |------|--------------|:---:|
-| `search_jobs` | Ranked, fit-scored jobs. Supports physical city/country labels plus canonical remote-eligibility country/region codes; free text is parsed server-side. | 1 unit / job returned |
-| `get_job_form` | Application form for a `jobId`, grouped `standard` / `screening` / `eeo` for answer prep. | **free** |
-| `get_learning_content` | Curated interview-prep, portfolio, and roadmap resources. | **free** |
+| `search_jobs` | Ranked, fit-scored jobs, each with a `productUrl` to the job in the landed app (apply there). Fill the structured fields (role, seniority, locations, remote, skills, minComp); free-text `query` is matched only as a title. | API token, daily limit by plan |
+| `get_learning_content` | Curated interview-prep, portfolio, and roadmap resources. | open to everyone |
+
+`search_jobs` returns one of three statuses:
+
+- `ok`: `jobs` (each with `jobId`, `title`, `company`, `location`, `fitLabel`, `oneLineWhy`, `productUrl`).
+- `sign_in_required`: no token was sent; the result has the message and `signupUrl`. The proxy answers this itself, without calling the API.
+- `limit_reached`: the day's searches for the plan are used; the result has `message`, `limit`, `resetsAt` and `upgradeUrl`.
 
 ## Prompts (guided workflows)
 
@@ -211,11 +211,10 @@ present results as a clean shortlist — never raw JSON. In most clients they sh
 
 | Prompt | Args | What it guides |
 |--------|------|----------------|
-| `find_jobs` | `describe?` | Search, then present a ranked, fit-scored shortlist + next steps. |
-| `prepare_application` | `jobId` | Fetch the form; auto-fill standard, draft screening, leave EEO to the user. |
+| `find_jobs` | `describe?` | Search, then present a ranked, fit-scored shortlist with links to apply in landed. |
 | `prep_for_role` | `role?` | Pull learning resources for a role and suggest a study order. |
 
-The server also ships always-on `instructions` (tool overview, presentation rules, freemium behavior)
+The server also ships always-on `instructions` (access and limits, tool overview, presentation rules)
 that compliant clients load automatically.
 
 ### Location parameters
@@ -235,13 +234,19 @@ IDs. The legacy `regions` field remains accepted for compatibility.
 
 ## Auth & pricing
 
-| Tier | How | What you get |
-|------|-----|--------------|
-| **Anonymous** | No header | A free budget of job-units **that resets every day at 00:00 UTC**. Metered by a hybrid of your IP and an issued `X-Landed-Anon` token (echoed on every response — resend it to keep your budget across sessions). |
-| **Authenticated** | `Authorization: Bearer lnd_live_…` | Unlimited search, personalized to your saved brief + profile. Mint a token at [Landed → Settings → API tokens](https://landed.jobs). |
+`search_jobs` needs `Authorization: Bearer lnd_live_…`. Sign in to [landed](https://app.landed.jobs) and
+create an API token in Settings. There is no anonymous tier for search.
 
-Every result carries a `freemium` block so your agent can see how much budget is left and how to lift
-the cap.
+Each search counts against a daily limit set by your landed plan:
+
+| Plan | Searches per day |
+|------|:---:|
+| Free | 10 |
+| Plus | 50 |
+| Pro and Max | 200 |
+
+At the limit, `search_jobs` returns `limit_reached` with when it resets and an upgrade link.
+`get_learning_content` is open to everyone, with or without a token.
 
 ---
 
@@ -254,14 +259,14 @@ API — it holds **no database, no ranking engine, and no job data**.
    MCP client                 landed-mcp (this repo)              Landed API
  ┌─────────────┐   HTTP    ┌────────────────────────┐  HTTPS   ┌────────────────────────┐
  │ Claude /    │ ───────▶  │ • MCP protocol + tools │ ──────▶  │ • search engine        │
- │ Cursor /    │  /mcp     │ • forwards caller creds│          │ • job corpus + forms   │
- │ VS Code …   │ ◀───────  │ • local learning list  │ ◀──────  │ • auth · freemium meter│
+ │ Cursor /    │  /mcp     │ • forwards caller creds│          │ • job corpus           │
+ │ VS Code …   │ ◀───────  │ • local learning list  │ ◀──────  │ • auth · plan limits   │
  └─────────────┘           └────────────────────────┘          └────────────────────────┘
 ```
 
-The proxy resolves nothing itself: it forwards the caller's API token (or an anonymous id) to the
-Landed API, which validates it, runs the search, meters usage, and returns results plus a `freemium`
-block the proxy relays verbatim. The `get_learning_content` catalog is static and lives in this repo
+The proxy forwards the caller's API token to the Landed API, which validates it, runs the search,
+counts it against the plan limit, and returns the result. A search without a token is answered by the
+proxy itself with `sign_in_required`, so it never reaches the API. The `get_learning_content` catalog is static and lives in this repo
 ([`src/mcp/catalog/learning.ts`](src/mcp/catalog/learning.ts)) — that tool works with no backend at all.
 
 ---
@@ -291,7 +296,7 @@ For production: `pnpm start`.
 
 ### Stdio and Docker
 
-For clients that start the server as a process, `pnpm start:stdio` speaks MCP over stdio instead of HTTP. Set `LANDED_API_TOKEN` to use your own API token; without it you get the anonymous free budget.
+For clients that start the server as a process, `pnpm start:stdio` speaks MCP over stdio instead of HTTP. Set `LANDED_API_TOKEN` to your API token; without it `search_jobs` answers `sign_in_required`.
 
 ```bash
 docker build -t landed-mcp .
@@ -308,7 +313,8 @@ The image runs the stdio server against the hosted API.
 | `LANDED_INTERNAL_SECRET` | ✓ | — | Shared secret authenticating this proxy to the API (must match the server's `INTERNAL_SERVICE_SECRET`). |
 | `PORT` | | `8090` | HTTP port to listen on. |
 | `CORS_ORIGINS` | | `*` | Comma-separated allowlist of origins, or `*`. |
-| `RATE_LIMIT_PER_MIN` | | `60` | Per-IP first-line request cap. The API's freemium meter is the real economic cap. |
+| `RATE_LIMIT_PER_MIN` | | `60` | Per-IP first-line request cap. Each person's plan search limit is the real economic cap. |
+| `LANDED_SIGNUP_URL` | | `https://app.landed.jobs` | Sign-up link in `sign_in_required` answers. |
 
 ### Endpoints
 
@@ -324,7 +330,7 @@ The image runs the stdio server against the hosted API.
 ```bash
 pnpm dev           # watch + reload
 pnpm check-types   # tsc --noEmit
-pnpm test          # deterministic input-contract tests
+pnpm test          # input-contract and search-result tests
 pnpm start         # run once
 ```
 
@@ -343,9 +349,9 @@ src/
 ├── types.ts                 # the API response contract (owned here)
 └── mcp/
     ├── server.ts            # instructions + tool/prompt registration
-    ├── prompts.ts           # find_jobs / prepare_application / prep_for_role
+    ├── prompts.ts           # find_jobs / prep_for_role
     ├── catalog/learning.ts  # static, public learning resources
-    └── tools/               # search_jobs · get_job_form · get_learning_content
+    └── tools/               # search_jobs · get_learning_content
 ```
 
 Stack: TypeScript · Express · [`@modelcontextprotocol/sdk`](https://github.com/modelcontextprotocol/typescript-sdk) · Zod. No database, no build step (runs on `tsx`).

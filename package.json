@@ -1,7 +1,7 @@
 {
 	"name": "landed-mcp",
-	"version": "0.1.1",
-	"description": "Landed's public Model Context Protocol server — search AI-native jobs, fetch application forms, and pull free learning content from any MCP client.",
+	"version": "0.2.0",
+	"description": "Landed's public Model Context Protocol server — search jobs with a landed API token and pull free learning content from any MCP client.",
 	"license": "MIT",
 	"type": "module",
 	"homepage": "https://mcp.landed.jobs",
