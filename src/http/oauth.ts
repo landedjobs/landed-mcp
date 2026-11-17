@@ -61,7 +61,7 @@ const PRIVACY = `<!doctype html><html lang="en"><head><meta charset="utf-8"><met
 <title>landed MCP privacy</title><style>body{font:16px/1.6 -apple-system,system-ui,sans-serif;max-width:680px;margin:40px auto;padding:0 16px;color:#1d1c1a}
 h1{font-size:26px}h2{font-size:18px;margin-top:28px}a{color:#d9441a}@media(prefers-color-scheme:dark){body{background:#17171a;color:#ecebe8}}</style></head><body>
 <h1>landed MCP server: privacy</h1>
-<p>This covers the landed connector at <code>mcp.landed.jobs</code>, used from Claude, ChatGPT, Gemini and other AI apps. The rest of landed is covered by <a href="https://www.landed.jobs/privacy">landed's privacy policy</a>.</p>
+<p>This covers the landed connector at <code>mcp.landed.jobs</code>, used from Claude, ChatGPT, Gemini and other AI apps. The rest of landed is covered by <a href="https://www.landed.jobs/privacy-policy">landed's privacy policy</a>.</p>
 <h2>What it can do</h2>
 <p>Read-only: search jobs ranked against your landed profile, and read free interview-prep resources. It can't apply for you, change your profile, or see your applications or messages.</p>
 <h2>What we log</h2>

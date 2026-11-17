@@ -184,9 +184,9 @@ curl -s -X POST https://mcp.landed.jobs/mcp \
 ### Registries
 
 Landed is listed on the [Official MCP Registry](https://registry.modelcontextprotocol.io) as
-`io.github.landedjobs/landed`, and on [Smithery](https://smithery.ai/servers/landedjobs/landed) as
-`landedjobs/landed`. Clients that read either registry can discover and install it without any
-manual configuration.
+`io.github.landedjobs/landed`, and on [Glama](https://glama.ai/mcp/servers/landedjobs/landed-mcp) and
+[MCP Market](https://mcpmarket.com/server/landed). Clients that read the registry can discover and install it
+without any manual configuration.
 
 ---
 
