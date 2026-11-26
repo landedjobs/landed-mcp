@@ -10,6 +10,8 @@
 [![Model Context Protocol](https://img.shields.io/badge/MCP-Streamable_HTTP-6E56CF.svg)](https://modelcontextprotocol.io)
 [![Works with Claude](https://img.shields.io/badge/Works_with-Claude-D97757.svg)](#claude-desktop)
 [![Works with Cursor](https://img.shields.io/badge/Works_with-Cursor-000000.svg)](#cursor)
+[![landedjobs/landed-mcp MCP server](https://glama.ai/mcp/servers/landedjobs/landed-mcp/badges/score.svg)](https://glama.ai/mcp/servers/landedjobs/landed-mcp)
+[![Landed MCP connector](https://glama.ai/mcp/connectors/io.github.landedjobs/landed/badges/score.svg)](https://glama.ai/mcp/connectors/io.github.landedjobs/landed)
 
 **Search AI-native jobs and study for interviews — from any MCP client.**
 A public [Model Context Protocol](https://modelcontextprotocol.io) server giving Claude, Cursor, VS Code, and any MCP-capable agent live access to [Landed](https://landed.jobs)'s ranked, fit-scored job corpus.
